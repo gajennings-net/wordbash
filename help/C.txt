@@ -1,0 +1,26 @@
+C is for Comments
+
+Data:
+
+Cl		array of comment IDs (depends on context)
+Cn		number of comments for $post
+Cp		boolean if comment can be added for $post
+Cr		comment "raw" data *
+Ch		comment headers *
+Cb		comment body *
+
+* currently only used internally within module
+
+Commands:
+
+C d $p		return directory for post post $p
+C D $p		test if post $p has comment directory [0] for yes
+C t			fill $Cl with IDs of "recent comments"
+C n $p		set $Cn to number of comments for post (empty if closed)
+C l $p		fill $Cl with comment IDs for post $p
+C r $p/$c	sets $from, $date and $body globals of post $p, comment $c
+C + $p		set $Cp to whether comments can be added to post $p
+C p $p		displays all comments for post $p using theme template 'cm'
+C a $p $f $d	add comment to post $p - $f and $d are from the theme comment 
+			FORM (and are properly quoted)
+C e			return last comment error string
