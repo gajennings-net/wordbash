@@ -1,6 +1,8 @@
 # WordBash
 ## WordPress Clone Written in Bash
 
+**This is just getting started...**
+
 ### WordBash is 1,200 lines of Bash code that looks just like *WordPress*
 
 >I wrote this code in order to learn BASH. And I really enjoyed doing so, 
