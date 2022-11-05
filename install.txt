@@ -1,0 +1,15 @@
+To test this code without a server it can be run interactively by:
+
+	$ cd [path-to-wordbash]
+	$ bash -i
+	$ . ./B.sh
+	$ help
+
+Currently though, the help files/documentation is incomplete.
+
+To test with Apache these files need to be somewhere accessible by it, e.g. 
+http://localhost/wordbash/. See README for more information.
+
+For comments to be saved the path meta/cmts/ and the file meta/cmts/.cmts 
+needs HTTP server write permission.
+

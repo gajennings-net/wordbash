@@ -1,0 +1,17 @@
+#
+
+Options -Indexes
+Options FollowSymLinks ExecCGI
+
+#FallbackResource /wordbash/wordbash.cgi
+
+RewriteEngine on
+RewriteRule ^index.html$ wordbash.cgi [L]
+
+<FilesMatch "\.sh$">
+    Order allow,deny
+    Deny from all
+    Satisfy All
+</FilesMatch>
+
+AddHandler cgi-script .cgi
