@@ -1,0 +1,471 @@
+/* 
+Based on WordPress TwentyEleven theme. It was not derived from WP 
+sources (except for a few properties for the FORM), just from what 
+it looks like. 100 lines or so are for highlighted source blocks. 
+*/
+
+section, article, header, footer {
+	display: block;
+}
+
+body {
+	margin: 2em auto;
+	max-width: 950px;
+}
+body, input, textarea {
+	color: #373737;
+	font-weight: 300;
+	line-height: 1.5;
+	background: #E2E2E2;
+	font: 15px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+a {
+	color: #1982d1;
+	text-decoration: none;
+}
+a[href]:hover, a:focus, a:active {
+	color: #1982d1;
+}
+
+header {
+	background: #fff;
+	padding-top: 10px;
+	border-top: 2px solid #bbb;
+}
+header h1, header h2 {
+	margin: 0;
+	padding-left: 70px;
+	padding-bottom: 10px;
+}
+header h1 {
+	float: left;
+}
+header h2 {
+	top: 15px;
+	font-size: 13px;
+	position: relative;
+	margin-left: 160px;
+	font-weight: normal;
+}
+header a {
+	color: #111;
+	font-size: 30px;
+	font-weight: bold;
+}
+header img {
+	width: 100%;
+	display: block; 
+}
+
+nav {
+	margin: 0;
+	width: 100%;
+	float: left;
+	background: #222;
+}
+nav ul {
+	margin: 0;
+	font-size: 13px;
+	list-style: none;
+	padding-left: 60px;
+}
+nav li {
+	float: left;
+}
+nav a {
+	color: #eee;
+	padding: 1em;
+	display: block;
+	font-size: 13px;
+}
+nav li:hover > a, nav a:focus {
+	color: #373737;
+	background: #efefef;
+}
+
+#links {
+/*	bottom: 2px;*/
+	top: 50%;
+	right: 8px;
+	position: fixed;
+}
+#links img {
+	width: 30px;
+	height: 30px;
+}
+
+
+aside {
+	width: 20%;
+	float: right;
+	margin: 0 40px 0 0;
+}
+aside h1 {
+	color: #666;
+	font-size: 10px;
+	line-height: 2em;
+	margin-bottom: 0;
+	font-weight: 500;
+	letter-spacing: 0.1em;
+}
+aside ul {
+	margin: 0;
+	list-style: square;
+	padding-left: 16px;
+}
+aside li {
+	font-size: 13px;
+	font-weight: bold;
+}
+aside li > span {
+	font-size: 12px;
+	font-weight: 400;
+}
+
+#content {
+	clear: both;
+	padding: 20px 0 10px 0;
+}
+
+#comments {
+	padding-left: 70px;
+	padding-bottom: 10px;
+}
+
+section {
+	background: #fff;
+}
+section > h1 {
+	width: 65%;
+	font-size: 90%;
+	font-weight: 400;
+	margin: 0 0 0 70px;
+	color: rgb(102,102,102);
+}
+section > h2 {
+	width: 65%;
+	font-size: 90%;
+	font-weight: 400;
+	margin: 0 0 20px 70px;
+	color: rgb(102,102,102);
+}
+
+article {
+	width: 65%;
+	counter-reset: nt;
+	margin: 0 0 20px 70px;
+}
+article a[href]:hover {
+	text-decoration: underline;
+}
+
+article h1 a {
+	color: #222;
+}
+article h1 a[href]:hover {
+	text-decoration: none;
+}
+article h1 {
+	margin: 0;
+	padding: 0;
+	font-size: 21px;
+}
+article h2 {
+	font-size: 17px;
+	margin: 14px 0 0 0;
+}
+article h3 {
+	margin: 0; 
+	font-size: 16px;
+}
+article h4 {
+	margin: 0;
+	font-size: 15px;
+}
+article h5 {
+	font-size: 14px;
+	margin: 15px 0 0 0;
+}
+article p {
+	margin: 10px 0 10px 0;
+}
+.time {
+	font-size: 95%;
+}
+article ul {
+	margin: 0;
+}
+article footer {
+	margin: 0;
+	font-size: 14px;
+}
+article footer a {
+	font-weight: bold;
+}
+article footer span {
+	font-weight: 300;
+}
+article.single {
+	width: 80%;
+	margin: 0 auto 20px auto;
+}
+article.page {
+	width: 80%;
+	padding-top: 1.5em;
+	margin-bottom: 20px;
+}
+article.single h1 {
+	margin: 20px 0 0 0;
+}
+article.single h2:first-child {
+	font-size: 14px;
+	font-weight: 300;
+	margin: 20px 0 0 -70px;
+}
+article tt, article code, article pre {
+	font-size: 14px;
+}
+
+blockquote {
+	width: 85%;
+	font-style: italic;
+	text-align: justify;
+	margin: 12px auto 12px;
+	padding: 4px 8px 8px 8px;
+	font-family: "Times New Roman", serif;
+}
+blockquote > span:first-child {
+	display: block;
+	font-size: 120%;
+	font-weight: 600;
+}
+table {
+	width: 100%;
+	padding: 4px;
+	border-radius: 2px;
+	border: 1px solid #bbb;
+}
+table tr:first-child {
+	text-align: left;
+}
+
+dt {
+	width: 1in;
+	float: left;
+}
+
+sup {
+	color: red;
+	font-size: 70%;  
+	vertical-align: 4px;
+}
+sup:after {
+	content: counter(nt);
+	counter-increment: nt;
+}
+
+small tt {
+	font-size: inherit;
+}
+
+section + footer {
+	font-size: 12px;
+	text-align: center;
+	background: #F9F9F9;
+	padding: 22px 0 22px 0; 	
+	border-top: 1px solid #DDD;
+}
+section + footer a {
+	color: #555;
+	font-weight: bold;
+}
+
+.cerr {
+	color: red;
+	font-style: italic;
+	margin: 0 0 20px 78px;
+}
+.cintro {
+	font-size: 80%;
+	font-weight: 400;
+	margin: 0 0 20px 78px;
+	color: rgb(102,102,102);
+	text-transform: uppercase;
+}
+.comment {
+	width: 60.4%;
+	font-size: 90%;
+	margin-left: 120px;
+	border-radius: 3px;
+	margin-bottom: 20px;
+	background: #F6F6F6;
+	border: 1px solid #DDD;
+	padding: 1em 1.5em 4px 1.5em;
+}
+
+#cform {
+	width: 60%;
+	padding: 1.5em;
+	background: #DDD;
+	margin-left: 120px;
+	margin-bottom: 40px;
+	border: 1px solid #D3D3D3;
+	border-radius: 3px 3px 3px 3px;
+}
+#cform p {
+	font-size: 12px;
+}
+#cform div {
+	font-size: 20px;
+	font-weight: bold;
+}
+#cform input[type="text"] {
+	width: 75%;
+	color: #888;
+	height: 24px;
+	padding: 10px;
+	display: block;
+	background: white;
+	text-indent: 80px;
+	position: relative;
+	border: 4px solid #EEE;
+	border-radius: 5px 5px 5px 5px;
+	box-shadow: 0 1px 3px rgba(204, 204, 204, 0.95) inset;
+}
+#cform input[type=text]:focus, #cform textarea:focus {
+	z-index: 1;
+	text-indent: 0;
+	color: #373737;
+}
+#cform textarea {
+	width: 97%;
+	color: #888;
+	padding: 4px;
+	display: block;
+	text-indent: 80px;
+	background: white;
+	position: relative;
+	margin-bottom: 12px;
+	border: 4px solid #EEEEEE;
+	border-radius: 5px 5px 5px 5px;
+	box-shadow: 0 1px 3px rgba(204, 204, 204, 0.95) inset;
+}
+#cform input[type="submit"] {
+	left: 30px;
+	float: right;
+	border: none;
+	color: #EEE;
+	cursor: pointer;
+	font-size: 15px;
+	background: #222;
+	border-radius: 3px;
+	position: relative;
+	padding: 5px 22px 5px 22px;
+}
+#cform input[type="submit"]:active {
+	color: #bfddf3;
+	background: #1982d1;
+}
+#cform label {
+	left: 4px;
+	top: 40px;
+	z-index: 1;
+	color: #555;
+	font-size: 13px;
+	min-width: 60px;
+	background: #eee;
+	padding: 4px 10px;
+	position: relative;
+	line-height: 2.2em;
+	display: inline-block;
+	box-shadow: 1px 2px 2px rgba(204,204,204,0.8);
+}
+
+/* taken from Geshi output */
+.imp {font-weight: bold; color: red;}
+.kw1 {color:#000;font-weight:bold;}
+.kw2 {color:#c20cb9; font-weight: bold;}
+.kw3 {color:#0086B3;}
+.co0 {color:#999988;}
+.co1 {color:#800000;}
+.co2 {color:#cc0000; font-style: italic;}
+.co3 {color:#000000; font-weight: bold;}
+.co4 {color:#666666;}
+.es1 {color:#000099;}
+.es2 {color:#008080;}
+.es3 {color:#007800;}
+.es4 {color:#007800;}
+.es5 {color:#780078;}
+.es_h {color:#000099; font-weight: bold;}
+.br0 {color:#000; font-weight:bold;}
+.sy0 {color:#000000;}
+.st0 {color:#d14}
+.st_h {color:#ff0000;}
+.nu0 {color:#000;}
+.me0 {color:blue;}
+.re0 {color:#008080;}
+.re1 {color:#008080;}
+.re2 {color:#008080;}
+.re4 {color:#008080;}
+.re5 {color:#660033;}
+
+div.sh, div.shell, div.php, div.txt {
+	width: 96%;
+	margin: 12px 0;
+
+}
+div.txt  pre {
+	margin: 0;
+}
+div.sh, div.shell, div.php, div.txt {
+	font-size: 14px;
+	border-radius: 2px;
+	font-family: courier;
+	border: 1px solid #bbb;
+	background-color: #F3F5F7;
+	padding: 10px; padding-left: 14px;
+}
+div.sh, div.php {
+	counter-reset: n;
+}
+
+div.sh > span:first-child, div.shell > span:first-child, div.php > span:first-child {
+	float: right;
+	color: #bbb;
+	cursor: default;
+	font-style: italic;
+	position: relative; top: -5px; 
+}
+div.sh p, div.shell p {
+	margin: 0;
+	line-height: 1.3em;
+}
+div.php {
+	line-height: 1.3em;
+}
+div.sh p > span:first-child {
+	width: 16px;
+	color: #bbb;
+	text-align: right;
+	margin-right: 5px;
+	padding-right: 3px;
+	display: inline-block;
+	border-right: 1px solid #bbb;
+}
+div.sh p > span:first-child:after {
+	content: counter(n);
+	counter-increment: n;
+}
+span.n {
+	width: 16px;
+	color: #bbb;
+	text-align: right;
+	margin-right: 5px; 
+	padding-right: 3px;
+	display: inline-block;
+	border-right: 1px solid #bbb;
+}
+span.n:after {
+	content: counter(n);
+	counter-increment: n;
+}
