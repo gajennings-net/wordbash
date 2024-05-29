@@ -81,6 +81,6 @@ Or how 'bout something really lame like this:
         fi
         Dh[$i]=$l
         (( ++i ))
-    done < "$1/$2"
+    done < "$dir/$file"
 
 Yeah, I guess it's just me. We really need a fucking structured query language to do anything like this. Yeah.
