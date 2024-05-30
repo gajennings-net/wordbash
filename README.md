@@ -83,4 +83,4 @@ Or how 'bout something really lame like this:
         (( ++i ))
     done < "$dir/$file"
 
-Yeah, I guess it's just me. We really need a fucking structured query language to do anything like this. Yeah.
+Yeah, I guess it's just me. We really need a bloody structured query language to do anything like this. Yeah.
