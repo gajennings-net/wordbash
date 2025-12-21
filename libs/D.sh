@@ -66,7 +66,7 @@ local r
 	if [[ $2 == "t" ]]; then
 		r=($1/.[[:digit:]]*)
 	else
-		r=($1/*)
+		r=($1/*[0-9])
 	fi
 	if [[ $r ]]; then
 		Dn=${#r[@]}
@@ -76,7 +76,7 @@ local r
 #list
 dl() {
 local p
-	Dl=($1/*)
+	Dl=($1/[0-9]*)
 	Dl=(${Dl[@]#$1/})
 	ds
 	if [[ $2 == "n" ]]; then
