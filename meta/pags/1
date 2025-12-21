@@ -1,0 +1,18 @@
+About
+Dec 11, 2013 11:00AM
+
+<h2>Welcome to WordBash</h2>
+<p>WordBash is a WordPress clone written in BASH. As you may already have read, everything you see here is generated and output by BASH. No AWK. No SED. No TR. It is all BASH, all the way. The only program used to help is <tt>date</tt>.</p>
+<p>I make the following claims about the WordBash code:</p>
+<ul>
+<li>A true caching web template engine.
+<li>An adaptive extensible code structure.
+<li>An adaptive extensible database structure.
+<li>A hierarchical document oriented database.
+<li>Object Oriented programming without class bloat.
+</ul>
+<p>WordBash was written to show that it is possible to write <em>shell code</em> that does <strong>more than is thought possible</strong> without external programs.</p>
+<p>WordBash currently does not have some WordPress features such as RSS/XML links, Gravatar integration, Trackbacks, a Media library, Plugins and a few others. But this is WordBash version 0.1, and <em>I am working with the assumption</em> that any feature can be implemented in WordBash if I take the time to implement it.</p>
+<p>What you have here is a Demo version of WordBash. Excluded from the download is the administration code that would allow adding/editing of posts, managing comments, managing tags and categories, and a few other things.<p>
+<p>This Demo version of WordBash uses the file system as a database. This is not an inefficient way of doing things (on the contrary), it just presents some additional manual intervention in that some files and directories must have the other users write bit to be set.</p>
+<p>The WordBash code is written to be expanded. WordBash is <em>insignificant is size</em> but it shows how <em>overly complicated</em> most code is--<b>as is WordBash</b> as it can be made simpler as hinted in <a href="readme.txt">readme.txt</a>.</p>

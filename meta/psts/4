@@ -1,0 +1,38 @@
+Web Templates
+Jan 6, 2014 11:12AM
+default
+WordBash bash
+
+<h2>A Web Template <em>Non-Engine</em></h2>
+<p>I have seen it written that templates cannot be implemented in BASH. Well, <em>"The impossible takes a little longer,"</em> someone once said. But it actually did not take me all that long to create a true web template API of about 100 lines.</p>
+<p>First, there exists global site data such as this:</p>
+<div class="sh"><span title="highlighting the code will exclude line numbers">bash code</span>
+<p><span></span><span class="re2">sitebase</span>=<span class="co1">${SCRIPT_NAME%/*}</span></p>
+<p><span></span><span class="re2">sitehost</span>=<span class="st0">&quot;http://<span class="es2">$HTTP_HOST</span><span class="es2">$REQUEST_URI</span>&quot;</span></p>
+<p><span></span><span class="re2">sitedesc</span>=<span class="st0">&quot;Syntagmatic Personal Publishing Platform&quot;</span></p>
+<p><span></span><span class="re2">sitename</span>=<span class="st0">&quot;&#087;ordBash&quot;</span></p>
+<p><span></span><span class="re2">sitetitle</span>=<span class="st0">&quot;The first &#087;ordBash site&quot;</span></p>
+</div>
+<p>A basic template, which comes from a file, is like this:</p>
+<div class="txt"><pre>
+text='&lt;!DOCTYPE html&gt;
+&lt;title&gt;$sitetitle&lt;/title&gt;
+&lt;link rel="stylesheet" type="text/css" href="$sitebase/style.css"&gt;
+&lt;header&gt;
+&lt;h1&gt;&lt;a href="$sitehost" title="$sitetitle"&gt;$sitename&lt;/a&gt;&lt;/h1&gt;
+&lt;h2&gt;$sitetitle&lt;/h2&gt;
+&lt;/header&gt;'
+</pre></div>
+<p>Just what is a this for anyway?</p>
+<p>It is to display the HTML with the variable references replaced by the actual data during run-time. Doing so takes what is known as an "engine". Why? It generally takes a lot of code to do it. <em>A lot of code.</em></p>
+<p>It can be done in BASH like this:</p>
+<!--more-->
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="re2">text</span>=<span class="co1">${text//\&quot;/\\\&quot;}</span></p>
+<p><span></span><span class="kw3">eval</span> <span class="st0">&quot;text=<span class="es1">\&quot;</span><span class="es2">$text</span><span class="es1">\&quot;</span>&quot;</span></p>
+<p><span></span><span class="kw3">echo</span> <span class="st0">&quot;<span class="es2">$text</span>&quot;</span></p>
+</div>
+<p>Of course, the full WordBash "engine" is implemented as a library, Object Oriented and with a rich API. Not only does it support (true) HTML templates, it has caching, display and substitution by arguments and macro-like capabilities while being <em>easy to understand and to maintain</em>.</p>
+<p>What is does not have are code-like constructs or special "loop" codes. But that is because it <em>does not have to</em>. A WordBash theme is not implemented like a WordPress theme, only the result is the same.</p>
+<p>Some of the code though does have in-line string literals throughout. Such strings should be placed into a template (or a language file). WordBash Demo is a very minimal version.</p>
+<p>You may be thinking that <tt>eval</tt> is <em>dangerous</em>. The code performs an assignment of data only. (Trying to put all manner of code and/or data in a comment or post would be an appropriate test.)</p>

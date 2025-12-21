@@ -1,0 +1,19 @@
+Not Finished
+Feb 2, 2014 4:35PM
+
+<blockquote>
+WordBash development has been paused. I just wanted to demonstrate that a web application like a blog can be created as a shell script.
+</blockquote>
+<p>WordBash is <b>not finished</b>. At this stage, WordBash is what I call <em>proven concept</em>. Since you are seeing and interacting with software that is <em>almost identical to WordPress</em>, I consider this proof that WordBash is a working web application. However, not all WordPress features are implemented.</p>
+<p>The current <a href="?post=2#OO">Object Oriented approach</a>, as I have implemented it, is as valid as any "real" paradigm (and in fact shows that "real" classes and objects can just add bloat and why I am calling WordBash non-paradigm code), and that may not change much, but WordBash will end up with <em><b>architectural changes</b></em> if I continue development.</p>
+<p>WordBash has had <b>only about eight months of development</b>--with several months of gaps--and there are bound to be one or two things wrong that could completely mess things up. <em><b>I wrote this code to learn BASH.</b></em><sup></sup></p> 
+<p>Many of modern programming's fancy methodologies and paradigms can be implemented in <b>shell script</b>. So too can they be implemented in <b>machine language</b>, as that is in reality all that exists anyway (if you heard this from me first, <em>you should not have heard this from me first</em>).</p>
+<p>Except that, as I am trying to demonstrate with WordBash, these methodologies and paradigms <em>are not always necessary</em>.
+<!--more-->
+<h3>Future Versions</h3>
+<p>WordBash has been an on and off development project. There are perhaps few limitations to what can be done to create a complete WordPress clone in just BASH.</p>
+<p>But this code already <em>looks and acts like</em> WordPress in <em>only 1,300 lines of BASH shell script</em>.<sup></sup> I chose the <cite>Twenty Eleven</cite> theme to release in as it is quite popular--I do not particularly like that it wastes so much space (and I lessened it), however, a WordBash theme consists of just two files. Besides, "look and feel" is only HTML and Javascript.</p>
+<p><small><br><b>Notes:</b><br>
+1. As a curiosity at first--but then it worked.<br>
+2. Some code, including the Admin code, is not included in this version. 
+</small></p>

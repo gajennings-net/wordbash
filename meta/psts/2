@@ -1,0 +1,60 @@
+About the Code
+Nov 5, 2013 14:35PM
+default
+WordBash
+
+<p>This version of WordBash lacks the Admin code and some features.</p>
+<h2>WordBash is Weird</h2>
+<p>If you have looked at the source code you are probably shaking your head in bewilderment as WordBash is <em>not written an any sort of "standard" style.</em> I do some things that nobody else does or would do; but there is a reason to my madness. I may appear to be trying to obfuscate the code; on the contrary, it should become clear.</p>
+<blockquote>
+The file readme.txt explains the variable naming convention I chose, and over time things have gotten a bit more complicated than I imply here (it's essentially this post updated).
+</blockquote>
+<p>WordBash is written in a unique style of my own making because I was working with only the BASH man page at the time (it provides no examples), and I made things up to suit myself--and I created a stringent, self-documenting naming convention. I started with an Object Oriented approach suitable for change (yes, OO in BASH). This is described below.</p>
+<p>Everything is designed with a <b>minimalist's</b> perspective--<em>everything is minimal in size and scale</em>: variable names, file names, file length, function length... everything.</p>
+<!--more-->
+<h3>File Names</h3>
+<p>The main code consists of one CGI script, a "configuration" source file, several "library" source files and a few HTML files. The HTML files are in <tt>cont/</tt>. The library files are in <tt>libs/</tt>. All the site's data are in <tt>meta/</tt> (in a fairly complex--for now--hierarchy).</p>
+<p>The CGI file is <tt>wordbash.cgi</tt>. All other source files have a <tt>.sh</tt> extension. The main configuration file is <tt>B.sh</tt>. Library files are a single uppercase letter, with each file's letter related it's use. The library files are <tt>libs/C.sh</tt> for comments, <tt>libs/P.sh</tt> for posts, etc. There is also a supplemental configuration file, <tt>cf.sh</tt>, which expands some data defined in <tt>B.sh</tt>.</p>
+<h3>Variable Names</h3>
+<p>I chose a very specific naming convention. Globals are of four groups: CGI, Config, Library and Template.</p>
+<table>
+<tr><th>Area<th>Used<th>Name
+<tr><td>CGI<td>in the <tt>.cgi</tt> code<td>3 or 4 letters, whole word (GET/POST data)
+<tr><td>Config<td>anywhere<td>2 letters beginning with the letter 'B'
+<tr><td>Library<td>in a library<td>2 letters beginning with the letter of the library
+<tr><td>Template<td>anywhere<td>"word" variables such as 'body', 'title'
+</table>
+<p>In addition there are a few two letter variables beginning with 'r' and ending with a library letter for library function exit status; several web template only variables starting with 'site'; and a few generic functions beginning with 'b'.<sup></sup> Temporary variables are always a single letter. Local variables can be anything. Cookie variables (there is one) begin with an underscore.</p>
+<h4>Constants</h4>
+<p>Variables used as constants are four uppercase letters beginning with the library which it is defined for.</p>
+<blockquote>In other languages, such as PHP, global data is generally avoided. But with BASH, global data is <u>a benefit</u> and not <u>a problem</u>. Overuse of subhells to "pass" data around adversely effects BASH performance for CGI use.</blockquote>
+<h3 id="OO">Libraries</h3>
+<p>A library interface is an Object Oriented function named by the same uppercase letter, each taking one or more arguments: a "command letter" and optional data. Examples:</p>
+<div class="sh"><span>bash code</span>
+<p><span></span>C l</p>
+<p><span></span>C a <span class="st0">&quot;<span class="es2">$data</span>&quot;</span></p>
+<p><span></span>P t <span class="st0">&quot;<span class="es2">$tag</span>&quot;</span></p>
+<p><span></span>P p <span class="es2">$n</span></p>
+</div>
+<p>The command letters are abbreviations for actions: "list", "add", "tag", "print". This is equivalent to, and no different than:</p>
+<div class="php"><span>PHP code</span>
+<span class="n"></span><span style="color:#0000BB">$Comments</span><span style="color:#007700">-&gt;</span><span style="color:#0000BB">list</span><span style="color:#007700">()</span><span style="color:#007700">;<br>
+<span class="n"></span></span><span style="color:#0000BB">$Comments</span><span style="color:#007700">-&gt;</span><span style="color:#0000BB">add</span><span style="color:#007700">(</span><span style="color:#0000BB">$data</span><span style="color:#007700">);<br>
+<span class="n"></span></span><span style="color:#0000BB">$Posts</span><span style="color:#007700">-&gt;</span><span style="color:#0000BB">tag</span><span style="color:#007700">(</span><span style="color:#0000BB">$tag</span><span style="color:#007700">);<br>
+<span class="n"></span></span><span style="color:#0000BB">$Posts</span><span style="color:#007700">-&gt;</span><span style="color:#0000BB">print</span><span style="color:#007700">(</span><span style="color:#0000BB">$n</span><span style="color:#007700">);</span>
+</div>
+<p>A library may have it's own "internal" functions. These functions are named with two lowercase letters, with the first letter the same as the library name, the second indicative the function's purpose. These functions may actually do the "work" of the library, however, <em>these functions are not called directly</em>, only a library's "main" entry point is ever called.</p>
+<p>Library global variable names generally follow the command name: <tt>$Cn</tt> for <tt>C n</tt> for example.</p>
+<h3>Code Comments</h3>
+<p><b>There are no code comments.</b> (Other than a few functions being named.) This is not to hide anything (i.e. they have not been removed for they were never written). While writing the code I wanted to focus on writing code <b>not</b> comments. (The thought of commenting for other people did not occur to me as I was unsure if this would work.) If the code is not understandable (depending on your BASH fluency) <em>then I am doing something wrong.</em></p>
+<p>Self-documenting conventions along with documentation such as this makes for better code in my opinion.</p>
+<h3>To Bash Coders</h3>
+<p>I learned BASH in a vacuum, with the bash manual as my sole guide at first. Therefore, two things about my code: I probably do not do what most BASH programmers do; I probably do what most BASH programmers would not do.</p>
+<p>There are some inconsistencies around the use of <tt>$?</tt>, and a few other things of that nature. I chose to use the <tt>[[</tt> conditional command overall instead of inter-mixing with <tt>test</tt> for consistency.<sup></sup> Strings in conditionals are not double quoted if they are whole words or numbers. Some variables and functions share the same name--I find this to not be a problem as their use are not the same.</p>
+<h3>Summary</h3>
+<p>Whatever one thinks about my coding style or my implementation (which is changing): <em><b>this is the basis for a working WordPress clone in 1,300 lines of BASH script</b></em>.</p>
+<p>Not every feature of WordPress has been implemented, but it has most of the basics.</p>
+<p><small><br><b>Notes:</b><br>
+1. This convention is not sustainable but indicative two letter names are. WordBash architecture is specifically designed to make the use of many small names understandable and therefore manageable.<br>
+2. Except for a couple, and they are out of place and I should change them.
+</small></p>

@@ -19,11 +19,9 @@ local d
 		if [[ $1 ]]; then
 			Sd=$1
 		fi
-		d=`date -v +${Sd}d "$SDFM"`
+		d=`date "$SDFM" -d "next day"`		# EXTERNAL PROGRAM
 		echo "Expires=$d"
 	fi
-# NOTE: The use of `date...` is not "Pure Bash", I know. It should be like:
-#       printf %(datefmt)T ... (there are not anymore of this)
 }
 
 # download
@@ -35,7 +33,7 @@ local s t st_size
 		zip) t=application/zip ;;
 		*) return 2 ;;
 	esac
-	s=($(stat -s $1))
+	s=($(stat -s $1))           	    	# EXTERNAL PROGRAM
 	declare "${s[7]}"
 	echo "Content-Type: $t"
 	echo "Content-Length: $st_size"

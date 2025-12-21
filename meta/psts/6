@@ -1,0 +1,190 @@
+Performance
+Feb 1, 2014 4:35PM
+default
+WordBash bash
+
+<p>This post addresses BASH performance by demonstrating code to accomplish three things:</p>
+<ul>
+<li>stripping HTML
+<li>decoding POST data
+<li>simple post markup
+</ul>
+<p>I think you will find it enlightening (well, I did).</p>
+<h2>Stripping HTML Tags</h2>
+<p>Stripping tags is straight forward and uses a single state flag:<p>
+
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="co0"># strip tags</span></p>
+<p><span></span>&nbsp;</p>
+<p><span></span>st<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">n</span>=<span class="co1">${#data}</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">t</span>=<span class="nu0">0</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">r</span>=</p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">for</span> <span class="br0">&#40;</span><span class="br0">&#40;</span> <span class="re2">i</span>=<span class="nu0">0</span>; i<span class="sy0">&lt;</span><span class="re1">$n</span>; i++ <span class="br0">&#41;</span><span class="br0">&#41;</span>; <span class="kw1">do</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#91;</span><span class="br0">&#91;</span> <span class="co1">${data:$i:1}</span> == <span class="st0">&quot;&gt;&quot;</span> <span class="br0">&#93;</span><span class="br0">&#93;</span>; <span class="kw1">then</span> <span class="re2">t</span>=<span class="nu0">0</span>; <span class="kw3">continue</span>; <span class="kw1">fi</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#91;</span><span class="br0">&#91;</span> <span class="re1">$t</span> == <span class="nu0">1</span> <span class="br0">&#93;</span><span class="br0">&#93;</span>; <span class="kw1">then</span> <span class="kw3">continue</span>; <span class="kw1">fi</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#91;</span><span class="br0">&#91;</span> <span class="co1">${data:$i:1}</span> == <span class="st0">&quot;&lt;&quot;</span> <span class="br0">&#93;</span><span class="br0">&#93;</span>; <span class="kw1">then</span> <span class="re2">t</span>=<span class="nu0">1</span>; <span class="kw3">continue</span>; <span class="kw1">fi</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; r+=<span class="co1">${data:$i:1}</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">done</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">data</span>=<span class="re1">$r</span></p>
+<p><span></span><span class="br0">&#125;</span></p>
+</div>
+
+<p>That, though, only demonstrates that expanding a string one character at a time is slow. Sometimes <tt>case</tt> is used for parsing data, so let's give it a try:</p>
+<!--more-->
+
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="co0"># strip tags version 2</span></p>
+<p><span></span>&nbsp;</p>
+<p><span></span>st<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">n</span>=<span class="co1">${#data}</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">t</span>=<span class="nu0">0</span>; <span class="re2">i</span>=<span class="nu0">0</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">r</span>=</p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">while</span> <span class="br0">&#91;</span> <span class="re1">$i</span> <span class="re5">-lt</span> <span class="re1">$n</span> <span class="br0">&#93;</span>; <span class="kw1">do</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">case</span> <span class="co1">${data:$i:1}</span> <span class="kw1">in</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; \<span class="sy0">&gt;</span><span class="br0">&#41;</span> <span class="re2">t</span>=<span class="nu0">0</span><span class="sy0">;;</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; \<span class="sy0">&lt;</span><span class="br0">&#41;</span> <span class="re2">t</span>=<span class="nu0">1</span><span class="sy0">;;</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="sy0">*</span><span class="br0">&#41;</span> <span class="kw1">if</span> <span class="br0">&#91;</span><span class="br0">&#91;</span> <span class="re1">$t</span> <span class="re5">-eq</span> <span class="nu0">0</span> <span class="br0">&#93;</span><span class="br0">&#93;</span>; <span class="kw1">then</span> r+=<span class="co1">${data:$i:1}</span>; <span class="kw1">fi</span><span class="sy0">;;</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">esac</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="br0">&#40;</span><span class="br0">&#40;</span> i++ <span class="br0">&#41;</span><span class="br0">&#41;</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">done</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">data</span>=<span class="re1">$r</span></p>
+<p><span></span><span class="br0">&#125;</span></p>
+</div>
+
+<p>Which is faster, but it still is not fast enough (and I dislike mis-applying a construct like that). There is something that is fast enough:</p>
+
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="co0"># strip tags version 3</span></p>
+<p><span></span>&nbsp;</p>
+<p><span></span>st<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">t</span>=<span class="nu0">0</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">r</span>=</p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">while</span> <span class="kw2">read</span> <span class="re5">-r</span> <span class="re5">-n</span> <span class="nu0">1</span> c; <span class="kw1">do</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#91;</span><span class="br0">&#91;</span> <span class="re1">$c</span> == <span class="st0">&quot;&gt;&quot;</span> <span class="br0">&#93;</span><span class="br0">&#93;</span>; <span class="kw1">then</span> <span class="re2">t</span>=<span class="nu0">0</span>; <span class="kw3">continue</span>; <span class="kw1">fi</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#91;</span><span class="br0">&#91;</span> <span class="re1">$t</span> == <span class="nu0">1</span> <span class="br0">&#93;</span><span class="br0">&#93;</span>; <span class="kw1">then</span> <span class="kw3">continue</span>; <span class="kw1">fi</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#91;</span><span class="br0">&#91;</span> <span class="re1">$c</span> == <span class="st0">&quot;&lt;&quot;</span> <span class="br0">&#93;</span><span class="br0">&#93;</span>; <span class="kw1">then</span> <span class="re2">t</span>=<span class="nu0">1</span>; <span class="kw3">continue</span>; <span class="kw1">fi</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#91;</span><span class="br0">&#91;</span> <span class="re5">-z</span> <span class="re1">$c</span> <span class="br0">&#93;</span><span class="br0">&#93;</span>; <span class="kw1">then</span> <span class="re2">c</span>=$<span class="st_h">'\n'</span>; <span class="kw1">fi</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; r+=<span class="re1">$c</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">done</span> <span class="sy0">&lt;&lt;&lt;</span> <span class="st0">&quot;<span class="es2">$data</span>&quot;</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">data</span>=<span class="re1">$r</span></p>
+<p><span></span><span class="br0">&#125;</span></p>
+</div>
+
+<p>Note that these and the other examples here use a global for the data; very easy to manage with code as small and as structured as WordBash.</p>
+
+<h2>Converting POST Data</h2>
+<p>POST data is encoded in a simple manner, and decoding using BASH could be simple string replacements:</P>
+
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="re2">POST_STRING</span>=<span class="co1">${POST_STRING//+/ }</span></p>
+<p><span></span><span class="re2">POST_STRING</span>=<span class="co1">${POST_STRING//%0D/}</span></p>
+<p><span></span><span class="re2">POST_STRING</span>=<span class="co1">${POST_STRING//%/\\x}</span></p>
+</div>
+
+<p>Culminating with something like this (which would actually be done on the data split by <tt>&amp</tt>):</p>
+
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="re2">POST_STRING</span>=$<span class="br0">&#40;</span><span class="kw3">echo</span> <span class="re5">-e</span> <span class="st0">&quot;<span class="es2">$POST_STRING</span>&quot;</span><span class="br0">&#41;</span></p>
+</div>
+
+<p>But even with a fairly small amount of data those string replacements can take a long time with a <em>very steep curve up</em> as the data increases. A much faster BASH way with a nice linear line up is:</p>
+
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="re2">p</span>=</p>
+<p><span></span><span class="kw1">while</span> <span class="kw2">read</span> <span class="re5">-r</span> <span class="re5">-n</span> <span class="nu0">1</span> t; <span class="kw1">do</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#91;</span><span class="br0">&#91;</span> <span class="re1">$t</span> == <span class="st_h">'%'</span> <span class="br0">&#93;</span><span class="br0">&#93;</span>; <span class="kw1">then</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">read</span> <span class="re5">-r</span> <span class="re5">-n</span> <span class="nu0">2</span> t</p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#91;</span><span class="br0">&#91;</span> <span class="re1">$t</span> == <span class="st_h">'0D'</span> <span class="br0">&#93;</span><span class="br0">&#93;</span>; <span class="kw1">then</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw3">continue</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">fi</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="re2">t</span>=<span class="st0">&quot;\\x<span class="es2">$t</span>&quot;</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">elif</span> <span class="br0">&#91;</span><span class="br0">&#91;</span> <span class="re1">$t</span> == <span class="st_h">'+'</span> <span class="br0">&#93;</span><span class="br0">&#93;</span>; <span class="kw1">then</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="re2">t</span>=<span class="st0">&quot; &quot;</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">fi</span></p>
+<p><span></span>&nbsp; &nbsp; p+=<span class="re1">$t</span></p>
+<p><span></span><span class="kw1">done</span> <span class="sy0">&lt;&lt;&lt;</span> <span class="st0">&quot;<span class="es2">$POST_STRING</span>&quot;</span></p>
+<p><span></span><span class="re2">POST_STRING</span>=<span class="re1">$p</span></p>
+</div>
+
+<p>But that still is unacceptably slow with large data (because no newlines). So, BASH needs external help.</p>
+<p>This is more than acceptably fast even for very large data:</p>
+
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="re2">POST_STRING</span>=<span class="sy0">`</span><span class="kw3">echo</span> <span class="st0">&quot;<span class="es2">$POST_STRING</span>&quot;</span> <span class="sy0">|</span> <span class="kw2">sed</span> <span class="re5">-e</span> <span class="st_h">'</p>
+<p><span></span>s/+/ /g</p>
+<p><span></span>s/%0D//g</p>
+<p><span></span>s/%/\\\\x/g</p>
+<p><span></span>'</span><span class="sy0">`</span></p>
+</div>
+
+<p>The external program (which could be PERL or any of many others available) need not be called directly--it could be a shell script. The data need not be in-line--it could be in the shell script or in a file.</p>
+<p>Indeed, other shell scripts (as stand alone programs of their own) could do much of what WordBash libraries do. Making many small programs work together is what scripting languages are generally used for. (I just chose to do something completely different.)</p>
+
+<h2>Post Translation Data</h2>
+<p>Another string replacement is what I call post translations, allowing for some Admin laziness. There is an array of data:</p>
+
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="co0"># post translate data; FROM = TO</span></p>
+<p><span></span>&nbsp;</p>
+<p><span></span><span class="re2">dp</span>=<span class="br0">&#40;</span></p>
+<p><span></span><span class="st_h">'&ndash;-'</span> <span class="st_h">'&amp;mdash;'</span></p>
+<p><span></span><span class="st_h">'&#066;ASH'</span> <span class="st_h">'&lt;strong&gt;Bash&lt;/strong&gt;'</span></p>
+<p><span></span><span class="br0">&#41;</span></p>
+</div>
+
+<p>What is odd about it is that it is a simple array but needs to be "even", which means it is applied by:</p>
+
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="co0"># post translate</span></p>
+<p><span></span>&nbsp;</p>
+<p><span></span>pt<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">for</span> <span class="br0">&#40;</span><span class="br0">&#40;</span> <span class="re2">i</span>=<span class="nu0">0</span>; i<span class="sy0">&lt;</span><span class="co1">${#dp[@]}</span>; i+=<span class="nu0">2</span> <span class="br0">&#41;</span><span class="br0">&#41;</span>; <span class="kw1">do</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="re2">body</span>=<span class="co1">${body//${dp[i]}</span><span class="sy0">/</span><span class="co1">${dp[i+1]}</span><span class="br0">&#125;</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">done</span></p>
+<p><span></span><span class="br0">&#125;</span></p>
+</div>
+
+<p>This works quite well except that it <em>slows down fast</em> as the data grows, slowing down so much that it would be unacceptably slow. It could be:</p>
+
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="co0"># post translate SED version</span></p>
+<p><span></span>&nbsp;</p>
+<p><span></span><span class="re2">dp</span>=<span class="st_h">'</p>
+<p><span></span>s/&ndash;-/\&amp;mdash;/g</p>
+<p><span></span>s/&#066;ASH/&lt;strong&gt;Bash&lt;\/strong&gt;/g</p>
+<p><span></span>'</span></p>
+<p><span></span>&nbsp;</p>
+<p><span></span><span class="re2">body</span>=<span class="sy0">`</span><span class="kw3">echo</span> <span class="st0">&quot;<span class="es2">$body</span>&quot;</span> <span class="sy0">|</span> <span class="kw2">sed</span> <span class="re5">-e</span> <span class="st0">&quot;<span class="es2">$dp</span>&quot;</span><span class="sy0">`</span></p>
+</div>
+
+<p>Which would be noticeably faster.<sup></sup></p>
+
+<h2>But Not So Fast</h2>
+<p>SED is <em>not used</em> here. The BASH code is used for a demonstration.</p>
+<p>This is the largest post here (about 17,700 characters), and on my 1.5GHz Pentium M, Windows XP/SP2, Cygwin test computer it displays in about two seconds (user time; about 300 milliseconds of system time). Not particularly fast, but it could be that computer capacity is growing...</p>
+<p>But, there is one important thing about BASH string replacement: <em><b>BASH string replacement is not really slow</b></em>.</p>
+<h2>Wait Just a Second</h2>
+<p>The <tt>times</tt> output at the bottom of the display is there for this reason: Refresh this page a few times, noting the time it takes. Then edit library D (<tt>libs/D.sh</tt>) to comment out line 137 and uncomment line 138. Refresh this page.</p>
+<p>Interestingly, if you look at the function (<tt>br</tt> in <tt>B.sh</tt>) you will see that it is... <em><b>BASH string replacement</b></em>:</p>
+
+<div class="sh"><span title="highlighting the code will exclude line numbers">bash code</span>
+<p><span></span><span class="co0"># string replace</span></p>
+<p><span></span>&nbsp;</p>
+<p><span></span>br<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></p>
+<p><span></span><span class="kw3">local</span> l r</p>
+<p><span></span>&nbsp; &nbsp; <span class="re2">r</span>=</p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">while</span> <span class="kw2">read</span> <span class="re5">-r</span> l; <span class="kw1">do</span></p>
+<p><span></span>&nbsp; &nbsp; &nbsp; &nbsp; r+=<span class="co1">${l//$1/$2}</span>$<span class="st_h">'\n'</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="kw1">done</span> <span class="sy0">&lt;&lt;&lt;</span> <span class="st0">&quot;$3&quot;</span></p>
+<p><span></span>&nbsp; &nbsp; <span class="kw3">echo</span> <span class="st0">&quot;<span class="es2">$r</span>&quot;</span></p>
+<p><span></span><span class="br0">&#125;</span></p>
+</div>
+
+<p>BASH string replacement can be said to be flawed as it's performance plummets unacceptably past a certain size and becomes slow--<em>yet line by line string replacement for the same data <b>is fast</b></em>.</p>
+<h2>The Final Word</h2>
+<p>WordBash demonstrates that BASH only code works well and that a web application like WordPress <em><b>can be implemented in only a few thousand lines of shell script</b></em>.</p>
+
+<p><small><br><b>Notes:</b><br>
+1. A drawback to this type of substitution is that it will occur everywhere, even when not wanted--like in these examples; so steps must be taken (I simply used character substitution in the posts, but the data and/or code can be made "smarter" by checking word boundary, etc.)
+</small></p>

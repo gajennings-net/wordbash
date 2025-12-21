@@ -1,0 +1,66 @@
+About the Data
+Dec 16, 2013 7:12PM
+default
+WordBash
+
+<h2>Document Database</h2>
+<p>The code does not use an SQL database (although it can I am not sure I want it to), so it is fairly heavy on the file system (as is an SQL database). Every post and comment is stored as a separate file, and some meta data too are stored in files, but every Operating System is optimized for reading and writing files.</p>
+<p>Changes will occur in the data format so I am hesitant to document it. Taken as a whole the data is a combination hierarchical, relational, document-oriented database. But the API is designed for change. The goofy "Object Oriented like" library interface I described? I will just replace one library with a new one that adheres to it when making changes, or simply add another library to extend operation (although there <em>are</em> a limited amount of letters).<sup></sup></p>
+<p>Currently, posts are stored in <tt>meta/psts/</tt> as numbered files; other directories are for pages, post comments, and post meta data for categories and tags. FTP or <cite>cPanel</cite> can be used for basic site administration.</p>
+<h2>Record Format</h2>
+<p>Both posts and comments are stored in a standard format: newline delimited headers followed by a newline, followed by the data. Such a format has two very good features. Easy to parse, amenable to additions. (This is as near to <em>non-encoded</em> as data can be.) Example:</p>
+<div class="txt"><pre>
+Title
+Date
+
+&lt;p&gt;Post text.&lt;/p&gt;
+</pre></div>
+<!--more-->
+<p>It takes only two lines of code to parse that data <em>no matter how many headers there are</em>. The last point means that data can be added at will. Any meta data such as categories and tags can be "just added". Whether the data is stored in a file or in a database <em>does not matter</em>.</p>
+<p>There is the drawback that the headers are <em>order dependent</em>.<sup></sup> But the sheer simplicity of it makes for a drawback easy to code with.</p>
+<p>The code:</p>
+<div class="sh"><span>bash code</span>
+<p><span></span><span class="re2">I</span>=<span class="re1">$IFS</span></p>
+<p><span></span><span class="re2">IFS</span>=$<span class="st_h">'\n'</span></p>
+<p><span></span><span class="re2">hdrs</span>=<span class="br0">&#40;</span><span class="co1">${data%%$'\n'$'\n'*}</span><span class="br0">&#41;</span></p>
+<p><span></span><span class="re2">IFS</span>=<span class="re1">$I</span></p>
+<p><span></span><span class="re2">body</span>=<span class="co1">${data#*$'\n'$'\n'}</span></p>
+</div>
+<p>Not <em>exactly</em> two lines, but that is really small, fast, efficient, understandable, etc. All the attributes one wants in code--it is the format of the data that allows for this.</p>
+<h2>No Markup Language</h2>
+<p>The record body needs to be HTML as it is just printed.<sup></sup> However there is a simple "word for word substitution" support.<p>
+<h2>No Data Definition Language</h2>
+<p>Although I do use the term database for the data storage (as it is appropriate) there is no "language" behind it (or in front of it). The database name is a subdirectory name, the primary key is a file name, and the table is newline delimited text. A (near) map:</p>
+<table>
+<tr><td>CREATE DATABASE ...<td>mkdir $path
+<tr><td>INSERT INTO ...<td>echo "$title"$'\n'"$date"$'\n'$'\n'"$data" > $path/$n
+<tr><td>DELETE FROM ...<td>rm $path/$n
+</table>
+<p>Others can be extrapolated. The file system calls are all in a library as an API and not used directly (that is just an example). To actually use an SQL database--or anything else--the API stays the same and a different library is used. Supplemental data, such as "recent comments" and "post tags" are also mapped to the file system via an API.</p>
+<p>I would call this <b>NoSQL</b> except "row" and "column" have no use here (nor Perl or AWK). Perhaps <b>non-SQL</b>, but that label is to vague (do a search). <b>Without SQL</b> is also... well, really weird (do a search). And this is not <b>anti SQL</b> (you will have to add "-injection"). This is just not SQL.</p>
+<h2>Global Data</h2>
+<p>In <a href="?post=2">About the Code</a> some of the API and variable names were detailed. Here is more. Global data is used to store record data. Example:</p>
+<table>
+<tr><th>API<th>Action<th>Type<th>Name
+<tr><td>P l<td>list<td>array<td>Pl
+<tr><td>P n<td>count<td>integer<td>Pn
+<tr><td>P r $n<td>read<td>strings<td>title, date, body
+</table>
+<h2>Comment Parsing</h2>
+<p>In a data related note, the most complicated part of WordBash, at over 300 lines (the average library is about 100) is the Comments library. It needs to do a few very important things:</p>
+<ul>
+<li>Strip HTML
+<li>Reject links
+<li>Break long words
+<li>Convert lines to paragraphs
+</ul>
+<p>All by BASH only code--no SED, AWK, etc.--which is the most important design criteria I imposed on the code.<sup></sup></p>
+<h2>On no External Programs</h2>
+<p>For parsing/manipulating large amounts of data (hundred kilobytes and up) BASH alone might be slow, but blog posts are never that large (and of course size could be checked and appropriate steps taken; for an example of that see <tt>libs/Q</tt>).</p>
+<p>I discuss performance in a later post.</p>
+<p><small><br><b>Notes:</b><br>
+1. There is one library that is "out of place": <tt>libs/D.sh</tt>. It is the database library and not called by the CGI code but by <tt>libs/P</tt> and <tt>libs/G</tt>.<br>
+2. Header data can have a name such as: <tt>date:Jan 1, 2014</tt>. Not difficult to do and it then becomes scalable.<br>
+3. The Admin code to edit posts is not included at this time.<br>
+4. I really just wanted to see if it could be done.
+</small></p>

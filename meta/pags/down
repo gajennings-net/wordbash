@@ -1,0 +1,107 @@
+Download
+May 21, 2024
+
+<h2>WordBash is a Bash Shell Script</h2>
+<p>Code is here: <a href="wordbash-1.0.3.zip">wordbash-1.0.3.zip</a> and there: <a href="https://github.com/gajennings-net/wordbash">Gitshit WordBash</a>.</p>
+<p>Bug Log</p>
+<pre>FILE: libs/S.sh
+
+    06:SEXP=30
+    07:SDFM="+%a, %d %b %G %T GMT"
+    ...
+    22:	d=`date -v +${Sd}d "$SDFM"`
+    23:	echo "Expires=$d"
+</pre>
+<p>That is wrong &mdash;it's left-over OS-X shit that is supposed to set a date some 30-something in the future. (Days I guess.)</p>
+<p>This aught to keep it from failing:</p>
+<pre>
+    22: d=`date "$SDFM" -d "next day"`
+</pre>
+<p>But also it should be based on something like this:</p>
+<pre>
+    22: d=$(printf "%($SDFM)T" $EPOCHSECONDS)
+</pre>
+<p>But that too exposes an error in my coding, that of the <tt>"+"</tt> in the date string. The code should have been:</p>
+<pre>
+    SDFM="%a, %d %b %G %T GMT"
+    d=`date "+$SDFM" -d "next day"`
+</pre>
+<p>That sole little plus is a big fucking deal.<p>
+<pre>FILE: B.sh
+
+158:    ${start:=0}
+</pre>
+<p>That should be:</p>
+<pre>
+158:    : ${start:=0}
+</pre>
+<p>I think there is at least one more of those.</p>
+<p>The code is not very robust, which means that there are stuff like this:</p>
+<pre>
+    [[ $arg -eq 0 ]]
+</pre>
+<p>Nothing wrong with that except when <tt>$arg</tt> is not an integer. The non-robustness is that for simplicity the posts and pages here are stored as numbered files, so <i>querying the database</i> is simply:</p>
+<pre>
+    dl=($Pd/[0-9]*)
+    dl=(${dl[@]#$Pd/})
+</pre>
+<p>Where <tt>$Pd</tt> is the directory, and the result is an array of numbers, which can then be counted, sorted, listed, etcetera. But, if by accident, a non-numerical file was created in the directory... there gonna be an improper arithmetic expression in one of those loops&mdash;actually there's gonna be: <tt>invalid arithmetic operator</tt>.</p>
+<p>Of course, I am just being a bit lazy as perhaps all that is needed is a better glob..</p>
+<p>But that is the core premise of <cite>WordBash</cite>, the question of, "What is the absolute minimum required to read/write a <i>post</i>?" Obviously, that is a file. (And lest anyone protest, a "database" is a file—albeit multiple files—as it cannot be anything else. Using fancy words like "cloud" and "distributed" don't change nothing.)</p>
+<p>So, if a post is a file, the read can be as simple as:</p>
+<p></p>
+<pre>
+    $(< $file)
+</pre>
+<p>But of course only if the file is stored formated with HTML, like by using a javascript rich text editor.</p>
+<p>But the other things required is some meta-data like post title, date, author etcetera. That is usually part of the database schema:</p>
+<pre>
+    CREATE TABLE poost (
+      ID INTEGER,
+      Name CHAR(40),
+      Title CHAR(200),
+      Date DATE,
+      PRIMARY KEY (ID)
+    )
+</pre>
+<p>Okay, fine. But, WFT? How about that RFC stuff? Since, like, what, 1977? Yeah. That shit.</p>
+<pre>
+    name:C.B.Jones
+    title:Download
+    date:May 21, 2024
+    
+    &lt;h2>WordBash is a Bash Shell Script&lt;/h2>
+    ...
+</pre>
+<p>Of course, I'm even dumber than that. I do:</p>
+<pre>
+    Download
+    May 21, 2024
+
+    &lt;h2>WordBash is a Bash Shell Script&lt;/h2>
+    ...
+</pre>
+<p>Cause name is always just mine, and like first come first server order (deny, allow!) first line is title, second is date, and a blank line terminates headers and then starts the body.</p>
+<p>And, of course, that can be done in Bash in just a few lines! Fuck! Ain't this shit cool! It's not unlike something like this:</p>
+<pre>
+    Dr=$(< $dir/$file)
+    I=$IFS; IFS=$'\n'
+    Dh=(${Dr%%$'\n'$'\n'*})
+    IFS=$I
+</pre>
+<p>Or how 'bout something really lame like this:</p>
+<pre>
+    while read -r l; do
+        if [[ "$l" == $'\n' ]]; then
+            break
+        fi
+        Dh[$i]=$l
+        (( ++i ))
+    done < "$1/$2"
+</pre>
+<p>Yeah, I guess it's just me. We really need a bloody structured query language to do anything like this. Yeah.</p>
+
+
+
+
+

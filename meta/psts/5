@@ -1,0 +1,37 @@
+WordBash Interactive
+Jan 28, 2014 21:53PM
+default
+WordBash
+
+<h2>An Interactive Session</h2>
+<p>This demonstrates using WordBash interactively.</p>
+<div class="shell"><span title="bash interactive session">bash -i</span>
+<p>/var/www/htdocs/wordbash</p>
+<p>$ bash -i</p>
+<p><span style="color: #666666;">bash-4.1$ </span>. ./B.sh</p>
+<p><span style="color: #666666;">bash-4.1$ </span>P n</p>
+<p><span style="color: #666666;">bash-4.1$ </span><span style="color: #7a0874; ">echo</span> <span style="color: #007800;">$Pn</span></p>
+<p>5</p>
+<p><span style="color: #666666;">bash-4.1$ </span>P l</p>
+<p><span style="color: #666666;">bash-4.1$ </span><span style="color: #7a0874; ">echo</span> <span style="color: #800000;">${Pl[@]}</span></p>
+<p>1 2 3 4 5</p>
+<p><span style="color: #666666;">bash-4.1$ </span>P r 1</p>
+<p><span style="color: #666666;">bash-4.1$ </span><span style="color: #7a0874; ">echo</span> <span style="color: #800000;">${Dh[@]}</span></p>
+<p>Introduction to &#087;ordBash Oct 18, 2013 14:35PM &#087;ordBash &#087;ordBash bash</p>
+<p><span style="color: #666666;">bash-4.1$ </span><span style="color: #7a0874; ">echo</span> <span style="color: #ff0000;">&quot;<span style="color: #007800;">$Dr</span>&quot;</span></p>
+<p>Introduction to &#087;ordBash</p>
+<p>Oct 18, 2013 14:35PM</p>
+<p>&#087;ordBash</p>
+<p>&#087;ordBash bash</p>
+<p>&nbsp;</p>
+<p>&lt;p&gt;These posts will describe &#087;ordBash in detail, and make some claims about it.</p>
+<p>...</p>
+<p><span style="color: #666666;">bash-4.1$ </span>P p 1</p>
+<p>&lt;article&gt;</p>
+<p>&lt;h1&gt;&lt;a href="?post=1" title="Introduction to &#087;ordBash"&gt;Introduction to &#087;ordBash&lt;/a&gt;&lt;/h1&gt;</p>
+<p>&lt;time&gt;Posted on &lt;a&gt;Oct 18, 2013 14:35PM&lt;/a&gt;&lt;/time&gt;</p>
+<p>&lt;p&gt;These posts will describe &lt;cite&gt;&#087;ordBash&lt;/cite&gt; in detail, and make some claims about it.</p>
+<p>...</p>
+<p><span style="color: #666666;">bash-4.1$</span></p>
+</pre>
+</div>
