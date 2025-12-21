@@ -66,7 +66,7 @@ local r
 	if [[ $2 == "t" ]]; then
 		r=($1/.[[:digit:]]*)
 	else
-		r=($1/*[0-9])
+		r=($1/[0-9]*)
 	fi
 	if [[ $r ]]; then
 		Dn=${#r[@]}
